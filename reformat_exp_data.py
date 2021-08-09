@@ -100,10 +100,13 @@ def reformat_data(exp_data_dir, output_dir):
             "This means that for at least one experiment, there is only "
             "'core PsychoPy' experiment output, or there is only eyetracker "
             "recording output.\n\n"
-            "Please double check the files to see if any files have been moved "
-            "from the data directory. If the issue can't be solved, please move "
-            "any CSV/HDF5 files that don't have a matching 'partner' file to a "
-            "separate directory and rerun the reformatting."
+            "The most likely reason for this problem is that an experiment was "
+            "aborted/closed down before it could finish, meaning no HDF5 file was saved. "
+            "Please make sure that the data directory only includes complete "
+            "experiment data sets (ie where there is an HDF5 file and CSV file "
+            "corresponding to an experiment run), by moving incomplete data to "
+            "a separate folder.\n" 
+            "When you're done, click the reformat button again."
         )
 
     # =======================================
@@ -220,7 +223,10 @@ def reformat_data(exp_data_dir, output_dir):
         # import psychopy experiment output data
         # (stimuli onset times/file names/positions et c.)
         psyp_df = pd.read_csv(csv_path)
-        for coln in core_interesting_colnames:
+
+        # check if all of the necessary data columns are
+        # in the CSV file, and otherwise raise an error
+        for coln in (core_interesting_colnames + ['trial_global_start_time']):
             if coln not in psyp_df.columns:
                 raise MissingColumnException((
                     f"Missing column in CSV file '{csv_path}':\n"
@@ -230,9 +236,6 @@ def reformat_data(exp_data_dir, output_dir):
                     "please move it, and its corresponding HDF5 file, "
                     "to another directory and rerun the reformatting."
                 ))
-        # check if all of the necessary data columns are
-        # in the CSV file, and otherwise raise an error
-        
 
         # =======================================
         # ADJUST EYETRACKER DATA TIMES
