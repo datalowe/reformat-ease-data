@@ -49,24 +49,15 @@ def find_closest_index(sorted_arr, search_val):
 
 
 def reformat_data(exp_data_dir, output_dir):
-    # =======================================
-    # SPECIFY INPUT AND OUTPUT DIRECTORY PATHS
-    # =======================================
-    # path to experiment data output directory, which holds
-    # CSV and HDF5 files. the CSV files should correspond to
-    # 'core PsychoPy' data output, while the HDF5 files correspond
-    # to ioHub/eyetracker data output
-    # exp_data_dir = (
-    #     '/Users/workingman/Documents/eyetracking_eeg_terje/'
-    #     'EASE_ET/psychopy_experiments/infant_audiovisual_eyetracking/'
-    #     'data/'
-    # )
-    # output_dir = (
-    #     '/Users/workingman/Documents/eyetracking_eeg_terje/'
-    #     'EASE_ET/psychopy_experiments/infant_audiovisual_eyetracking/'
-    #     'data/reformatted_data'
-    # )
-
+    """
+    Reformats PsychoPy data output, where each experiment run
+    produces one CSV file and one HDF5 file, named according to
+    the same logic, eg 'foobar_myexp_2021_Aug_09_1904.csv'
+    and 'foobar_myexp_2021_Aug_09_1904_hdf5.hdf5'.
+    :param exp_data_dir: Full path to raw experiment output directory.
+    :param output_dir: Full path to directory to output reformatted
+    data to.
+    """
     # =======================================
     # FIND ALL DATA FILES
     # =======================================
@@ -108,6 +99,12 @@ def reformat_data(exp_data_dir, output_dir):
             "a separate folder.\n" 
             "When you're done, click the reformat button again."
         )
+
+    # =======================================
+    # SORT DATA FILES BY NAMES
+    # =======================================
+    csv_fnames.sort()
+    hdf5_fnames.sort()
 
     # =======================================
     # DEFINE RELEVANT 'CORE PSYCHOPY' COLUMNS
@@ -246,7 +243,7 @@ def reformat_data(exp_data_dir, output_dir):
         # find all correctly registered trial start times from eyetracker/HDF5 file
         # (these are indicated by 'trial <trial_number> start' messages sent from PsychoPy to the
         # submodule handling the eyetracker)
-        et_stime_mask = et_df.message.notna() & et_df.message.str.match('trial \d start')
+        et_stime_mask = et_df.message.notna() & et_df.message.str.match('trial \d+ start')
         et_first_trial_start_times = et_df.time[et_stime_mask]
         # find the average offset between: 
         # * trial start times as recorded by the PsychoPy 'core', 
