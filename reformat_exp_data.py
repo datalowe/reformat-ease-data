@@ -243,7 +243,7 @@ def reformat_data(exp_data_dir, output_dir):
         # find all correctly registered trial start times from eyetracker/HDF5 file
         # (these are indicated by 'trial <trial_number> start' messages sent from PsychoPy to the
         # submodule handling the eyetracker)
-        et_stime_mask = et_df.message.notna() & et_df.message.str.match('trial \d+ start')
+        et_stime_mask = et_df.message.notna() & et_df.message.str.match('exp1 trial \d+ start')
         et_first_trial_start_times = et_df.time[et_stime_mask]
         # find the average offset between: 
         # * trial start times as recorded by the PsychoPy 'core', 
