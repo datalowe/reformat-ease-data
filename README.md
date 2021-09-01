@@ -4,9 +4,10 @@ This is an app built with Python, using pyinstaller, numpy, pandas, tkinter and 
 
 ## Building the app
 1. `cd` to the project's root directory
-2. Create a Python 3.8 virtual environment, with eg `python3.8 -m venv .venv`
+2. Create a Python 3.9 virtual environment, with eg `python3.9 -m venv .venv`
 3. Activate the virtual environment (eg `. ./.venv/bin/activate`).
-4. Build the application with `pyinstaller tkinter_application.py`., 
+4. Install dependencies using 'requirements.txt' (eg `pip install -r requirements.txt`).
+5. Build the application with `pyinstaller tkinter_application.py --name ease-reformat-data`.
 
 Note that building produces an __OS-specific__ runnable. Please see the offical docs for pyinstaller and the other packages mentioned above for more information.
 
